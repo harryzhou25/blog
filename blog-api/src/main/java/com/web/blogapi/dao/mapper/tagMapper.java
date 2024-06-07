@@ -10,6 +10,5 @@ import java.util.List;
 @Mapper
 public interface tagMapper extends BaseMapper<Tag> {
 
-    @Select("SELECT * from tag where article_id = #{article_id}")
     public List<Tag> selectTagByArticleId(Long article_id);
 }
