@@ -1,5 +1,6 @@
 package com.web.blogapi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.web.blogapi.dao.pojo.Article;
@@ -20,8 +21,10 @@ public class articleServiceImpl implements articleService {
     // Paging query articles
     @Override
     public List<Article> listArticlebyPage(pageParam pageParam) {
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         Page<Article> page = new Page<>(pageParam.getPage(), pageParam.getPageSize());
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        //Sort articles according to date and let top articles in the front of the array.
+        queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         return articlePage.getRecords();
     }
