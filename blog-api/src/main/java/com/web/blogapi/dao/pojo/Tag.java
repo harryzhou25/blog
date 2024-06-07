@@ -7,8 +7,7 @@ public class Tag {
 
     private Long id;
 
-    private String avatar;
+    private Long article_id;
 
     private String tagName;
-
 }
