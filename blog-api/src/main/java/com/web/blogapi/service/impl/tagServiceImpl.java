@@ -15,6 +15,6 @@ public class tagServiceImpl implements tagService {
     private tagMapper tagMapper;
 
     public List<Tag> queryTagsByArticleId(Long articleId) {
-
+        return tagMapper.selectTagByArticleId(articleId);
     }
 }
