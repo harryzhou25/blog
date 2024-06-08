@@ -1,6 +1,8 @@
 package com.web.blogapi.controller;
 
 import java.util.List;
+
+import com.web.blogapi.dao.dos.Archivedo;
 import com.web.blogapi.vo.pageParam;
 import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.service.articleService;
@@ -30,5 +32,10 @@ public class articleController {
     @GetMapping("new")
     public List<Article> getNewArticle(int num) {
         return articleService.selectNewest(num);
+    }
+
+    @GetMapping("archive")
+    public List<Archivedo> getArchives() {
+        return articleService.listArchives();
     }
 }

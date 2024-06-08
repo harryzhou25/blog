@@ -2,6 +2,7 @@ package com.web.blogapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.web.blogapi.dao.dos.Archivedo;
 import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.service.articleService;
 import com.web.blogapi.vo.pageParam;
@@ -27,6 +28,11 @@ public class articleServiceImpl implements articleService {
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         return articlePage.getRecords();
+    }
+
+    @Override
+    public List<Archivedo> listArchives() {
+        return articleMapper.listArchives();
     }
 
     @Override
