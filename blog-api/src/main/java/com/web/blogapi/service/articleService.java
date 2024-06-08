@@ -6,5 +6,9 @@ import com.web.blogapi.dao.pojo.Article;
 import java.util.List;
 
 public interface articleService {
-    public List<Article> listArticlebyPage(pageParam pageParam);
+    List<Article> listArticlebyPage(pageParam pageParam);
+
+    List<Article> selectHottest(int num);
+
+    List<Article> selectNewest(int num);
 }

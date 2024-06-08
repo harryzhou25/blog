@@ -21,11 +21,31 @@ public class articleServiceImpl implements articleService {
     @Override
     public List<Article> listArticlebyPage(pageParam pageParam) {
         Page<Article> page = new Page<>(pageParam.getPage(), pageParam.getPageSize());
-        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
 
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         //Sort articles according to date and let top articles in the front of the array.
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         return articlePage.getRecords();
+    }
+
+    @Override
+    public List<Article> selectHottest(int num) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        //Sort articles according to date and let top articles in the front of the array.
+        queryWrapper.orderByDesc(Article::getViewCounts);
+        queryWrapper.select(Article::getId, Article::getTitle);
+        queryWrapper.last("limit " + num);
+        return articleMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<Article> selectNewest(int num) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        //Sort articles according to date and let top articles in the front of the array.
+        queryWrapper.orderByDesc(Article::getCreateDate);
+        queryWrapper.select(Article::getId, Article::getTitle);
+        queryWrapper.last("limit " + num);
+        return articleMapper.selectList(queryWrapper);
     }
 }
