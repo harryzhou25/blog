@@ -1,7 +1,8 @@
 package com.web.blogapi.service;
 
+import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.loginParam;
 
 public interface loginService {
-    public String login(loginParam loginParam);
+    public Result login(loginParam loginParam);
 }
