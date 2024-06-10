@@ -1,5 +1,6 @@
 package com.web.blogapi.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.web.blogapi.vo.StatusCode;
 import com.web.blogapi.dao.pojo.sysUser;
 import com.web.blogapi.service.loginService;
@@ -11,11 +12,16 @@ import io.netty.util.internal.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class loginServiceImpl implements loginService {
     @Autowired
     sysUserService userService;
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     private static final String salt = "saltlt%#$*";
 
@@ -31,6 +37,14 @@ public class loginServiceImpl implements loginService {
         if(user == null){
             return Result.faild(StatusCode.ACCOUNT_PWD_NOT_EXIST.getCode(), StatusCode.ACCOUNT_PWD_NOT_EXIST.getMsg());
         }
-        return Result.success(JWTUtil.createToken(user.getId()));
+        String token = JWTUtil.createToken(user.getId());
+        redisTemplate.opsForValue().set("TOKEN_"+token, JSON.toJSONString(user),1, TimeUnit.DAYS);
+        return Result.success(token);
+    }
+
+    @Override
+    public Result logout(String token) {
+        redisTemplate.delete("TOKEN_"+token);
+        return Result.success(null);
     }
 }
