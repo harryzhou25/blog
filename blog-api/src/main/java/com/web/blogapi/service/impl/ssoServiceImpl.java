@@ -8,6 +8,7 @@ import com.web.blogapi.service.sysUserService;
 import com.web.blogapi.util.JWTUtil;
 import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.loginParam;
+import com.web.blogapi.vo.registerParam;
 import io.netty.util.internal.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,31 @@ public class ssoServiceImpl implements ssoService {
     public Result logout(String token) {
         redisTemplate.delete("TOKEN_"+token);
         return Result.success(null);
+    }
+
+    @Override
+    public Result register(registerParam registerParam) {
+        if(StringUtil.isNullOrEmpty(registerParam.getAccount())
+            || StringUtil.isNullOrEmpty(registerParam.getPassword())
+            || StringUtil.isNullOrEmpty(registerParam.getName())){
+            return Result.faild(StatusCode.PARAMS_ERROR.getCode(), StatusCode.PARAMS_ERROR.getMsg());
+        }
+        sysUser tmp = userService.getUserByaccount(registerParam.getAccount());
+        if(tmp != null){
+            return Result.faild(StatusCode.ACCOUNT_EXIST.getCode(), StatusCode.ACCOUNT_EXIST.getMsg());
+        }
+        sysUser user = new sysUser();
+        user.setAccount(registerParam.getAccount());
+        user.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + salt));
+        user.setCreateDate(System.currentTimeMillis());
+        user.setLastLogin(System.currentTimeMillis());
+        user.setDeleted(0);
+        user.setAdmin(0);
+
+        userService.insertUser(user);
+
+        String token = JWTUtil.createToken(user.getId());
+        redisTemplate.opsForValue().set("TOKEN_"+token, JSON.toJSONString(user),1, TimeUnit.DAYS);
+        return Result.success(token);
     }
 }

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtil {
-    private static final String jwtToken = "harry";
+    private static final String jwtToken = "s%#lalt$*(";
 
     public static String createToken(Long userId){
         Map<String,Object> claims = new HashMap<>();

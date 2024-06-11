@@ -19,11 +19,16 @@ public class sysUserServiceImpl implements sysUserService {
     }
 
     @Override
-    public sysUser getSysUserByaccount(String account) {
+    public sysUser getUserByaccount(String account) {
         return sysUserMapper.selectOne(new QueryWrapper<sysUser>().eq("account", account));
     }
 
     public sysUser getUser(String account, String password) {
         return sysUserMapper.selectOne(new QueryWrapper<sysUser>().eq("account", account).eq("password", password));
+    }
+
+    @Override
+    public void insertUser(sysUser user) {
+        sysUserMapper.insert(user);
     }
 }
