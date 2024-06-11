@@ -1,6 +1,6 @@
 package com.web.blogapi.controller;
 
-import com.web.blogapi.service.loginService;
+import com.web.blogapi.service.ssoService;
 import com.web.blogapi.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("logout")
 public class logoutController {
     @Autowired
-    loginService loginservice;
+    ssoService ssoservice;
 
     @GetMapping
     public Result logout(@RequestHeader("Authorization") String token) {
-        return loginservice.logout(token);
+        return ssoservice.logout(token);
     }
 }

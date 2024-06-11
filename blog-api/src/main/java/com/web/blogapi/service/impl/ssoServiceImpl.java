@@ -3,7 +3,7 @@ package com.web.blogapi.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.web.blogapi.vo.StatusCode;
 import com.web.blogapi.dao.pojo.sysUser;
-import com.web.blogapi.service.loginService;
+import com.web.blogapi.service.ssoService;
 import com.web.blogapi.service.sysUserService;
 import com.web.blogapi.util.JWTUtil;
 import com.web.blogapi.vo.Result;
@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class loginServiceImpl implements loginService {
+public class ssoServiceImpl implements ssoService {
     @Autowired
     sysUserService userService;
     @Autowired
