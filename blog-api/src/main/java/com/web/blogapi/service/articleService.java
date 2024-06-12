@@ -1,6 +1,7 @@
 package com.web.blogapi.service;
 
 import com.web.blogapi.dao.dos.Archivedo;
+import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.pageParam;
 import com.web.blogapi.dao.pojo.Article;
 
@@ -15,4 +16,5 @@ public interface articleService {
 
     List<Article> selectNewest(int num);
 
+    Result getBodyById(int id);
 }

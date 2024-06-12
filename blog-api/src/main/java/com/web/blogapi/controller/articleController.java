@@ -3,14 +3,12 @@ package com.web.blogapi.controller;
 import java.util.List;
 
 import com.web.blogapi.dao.dos.Archivedo;
+import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.pageParam;
 import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.service.articleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("article")
@@ -37,5 +35,10 @@ public class articleController {
     @GetMapping("archive")
     public List<Archivedo> getArchives() {
         return articleService.listArchives();
+    }
+
+    @GetMapping("body/{id}")
+    public Result getBodyById(@PathVariable int id) {
+        return articleService.getBodyById(id);
     }
 }

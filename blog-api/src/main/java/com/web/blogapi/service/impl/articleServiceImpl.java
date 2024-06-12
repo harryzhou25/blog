@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.web.blogapi.dao.dos.Archivedo;
 import com.web.blogapi.dao.pojo.Article;
+import com.web.blogapi.dao.pojo.articleBody;
 import com.web.blogapi.service.articleService;
+import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.pageParam;
 import com.web.blogapi.dao.mapper.articleMapper;
+import com.web.blogapi.dao.mapper.articleBodyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,9 @@ public class articleServiceImpl implements articleService {
 
     @Autowired
     private articleMapper articleMapper;
+
+    @Autowired
+    private articleBodyMapper articleBodyMapper;
 
     // Paging query articles
     @Override
@@ -53,5 +59,11 @@ public class articleServiceImpl implements articleService {
         queryWrapper.select(Article::getId, Article::getTitle);
         queryWrapper.last("limit " + num);
         return articleMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public Result getBodyById(int id) {
+        articleBody articleBody = articleBodyMapper.selectById(id);
+        return Result.success(articleBody);
     }
 }
