@@ -1,7 +1,6 @@
 package com.web.blogapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.web.blogapi.dao.mapper.articleMapper;
 import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.service.ThreadService;
