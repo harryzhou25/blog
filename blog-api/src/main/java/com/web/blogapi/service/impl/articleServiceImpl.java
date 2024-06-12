@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.web.blogapi.dao.dos.Archivedo;
 import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.dao.pojo.articleBody;
+import com.web.blogapi.service.ThreadService;
 import com.web.blogapi.service.articleService;
 import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.pageParam;
@@ -23,6 +24,9 @@ public class articleServiceImpl implements articleService {
 
     @Autowired
     private articleBodyMapper articleBodyMapper;
+
+    @Autowired
+    private ThreadService threadService;
 
     // Paging query articles
     @Override
@@ -63,7 +67,12 @@ public class articleServiceImpl implements articleService {
 
     @Override
     public Result getBodyById(int id) {
-        articleBody articleBody = articleBodyMapper.selectById(id);
+        Article article = articleMapper.selectById(id);
+        articleBody articleBody = articleBodyMapper.selectById(article.getBodyId());
+        // update view count only when the frontend queries article body
+        // avoid influencing the time cost of querying article body, I decided update the value using multithreading.
+        // TODO: Change this update by using redis.
+        threadService.updateArticleCount(articleMapper, article);
         return Result.success(articleBody);
     }
 }

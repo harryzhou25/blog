@@ -37,6 +37,11 @@ public class articleController {
         return articleService.listArchives();
     }
 
+    /**
+     * Query article body through article id
+     * @param id The article id
+     * @return Result contains articleBody
+     */
     @GetMapping("body/{id}")
     public Result getBodyById(@PathVariable int id) {
         return articleService.getBodyById(id);
