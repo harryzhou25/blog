@@ -1,6 +1,5 @@
 package com.web.blogapi.controller;
 
-import com.web.blogapi.dao.pojo.Comment;
 import com.web.blogapi.service.commentService;
 import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.commentParam;
