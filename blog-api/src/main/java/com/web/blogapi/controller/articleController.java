@@ -1,11 +1,9 @@
 package com.web.blogapi.controller;
 
-import java.util.List;
 
 import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.pageParam;
 import com.web.blogapi.vo.articleParam;
-import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.service.articleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
