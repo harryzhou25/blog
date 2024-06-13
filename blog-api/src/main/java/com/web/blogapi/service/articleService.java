@@ -1,20 +1,19 @@
 package com.web.blogapi.service;
 
-import com.web.blogapi.dao.dos.Archivedo;
 import com.web.blogapi.vo.Result;
+import com.web.blogapi.vo.articleParam;
 import com.web.blogapi.vo.pageParam;
-import com.web.blogapi.dao.pojo.Article;
-
-import java.util.List;
 
 public interface articleService {
-    List<Article> listArticlebyPage(pageParam pageParam);
+    Result listArticlebyPage(pageParam pageParam);
 
-    List<Archivedo> listArchives();
+    Result listArchives();
 
-    List<Article> selectHottest(int num);
+    Result selectHottest(int num);
 
-    List<Article> selectNewest(int num);
+    Result selectNewest(int num);
 
     Result getBodyById(int id);
+
+    Result publishArticle(articleParam articleparam);
 }

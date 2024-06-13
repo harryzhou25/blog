@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Article {
 
-    public static final int Article_TOP = 1;
+    public static final int Article_TOP = 0;
 
     public static final int Article_Common = 0;
 

@@ -2,9 +2,9 @@ package com.web.blogapi.controller;
 
 import java.util.List;
 
-import com.web.blogapi.dao.dos.Archivedo;
 import com.web.blogapi.vo.Result;
 import com.web.blogapi.vo.pageParam;
+import com.web.blogapi.vo.articleParam;
 import com.web.blogapi.dao.pojo.Article;
 import com.web.blogapi.service.articleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +17,42 @@ public class articleController {
     @Autowired
     private articleService articleService;
 
+    /**
+     * Query articles by page
+     * @param pageParam the page parameter
+     * @return Result
+     */
     @PostMapping
-    public List<Article> getArticleList(pageParam pageParam){
+    public Result getArticleList(pageParam pageParam){
         return articleService.listArticlebyPage(pageParam);
     }
 
+    /**
+     * Query the hottest 'num' articles
+     * @param num The number of articles
+     * @return Result
+     */
     @GetMapping("hot")
-    public List<Article> getHotArticle(int num) {
+    public Result getHotArticle(int num) {
         return articleService.selectHottest(num);
     }
 
+    /**
+     * Query the newest 'num' articles
+     * @param num The number of articles
+     * @return Result
+     */
     @GetMapping("new")
-    public List<Article> getNewArticle(int num) {
+    public Result getNewArticle(int num) {
         return articleService.selectNewest(num);
     }
 
+    /**
+     * Query all the archives according to create date
+     * @return Result
+     */
     @GetMapping("archive")
-    public List<Archivedo> getArchives() {
+    public Result getArchives() {
         return articleService.listArchives();
     }
 
@@ -45,5 +64,10 @@ public class articleController {
     @GetMapping("body/{id}")
     public Result getBodyById(@PathVariable int id) {
         return articleService.getBodyById(id);
+    }
+
+    @PostMapping("publish")
+    public Result publishArticle(@RequestBody articleParam articleparam) {
+        return articleService.publishArticle(articleparam);
     }
 }
