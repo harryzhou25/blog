@@ -27,7 +27,8 @@ public class commentController {
         return commentservice.insertComment(commentparam);
     }
 
-    public Result deleteComment(Long id) {
+    @GetMapping("delete/{id}")
+    public Result deleteComment(@PathVariable Long id) {
         return commentservice.deleteComment(id);
     }
 }
