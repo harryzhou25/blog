@@ -4,4 +4,6 @@ import com.web.blogapi.vo.Result;
 
 public interface categoryService {
     Result getCategoryById(int id);
+
+    Result getAllCategory();
 }

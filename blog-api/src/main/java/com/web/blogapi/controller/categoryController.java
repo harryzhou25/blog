@@ -19,4 +19,9 @@ public class categoryController {
     public Result getCategoryById(@PathVariable int id) {
         return categoryService.getCategoryById(id);
     }
+
+    @GetMapping
+    public Result getAllCategory() {
+        return categoryService.getAllCategory();
+    }
 }
