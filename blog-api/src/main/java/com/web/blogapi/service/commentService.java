@@ -9,4 +9,6 @@ public interface commentService {
     Result getCommentsByPid(Long pid);
 
     Result insertComment(commentParam commentparam);
+
+    Result deleteComment(Long id);
 }

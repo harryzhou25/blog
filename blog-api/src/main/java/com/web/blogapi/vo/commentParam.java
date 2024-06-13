@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class commentParam {
+    private Long commentId;
+
     private Long articleId;
 
     private Long parentId;

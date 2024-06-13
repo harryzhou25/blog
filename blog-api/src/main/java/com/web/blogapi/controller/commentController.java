@@ -26,4 +26,8 @@ public class commentController {
     public Result insertComment(commentParam commentparam) {
         return commentservice.insertComment(commentparam);
     }
+
+    public Result deleteComment(Long id) {
+        return commentservice.deleteComment(id);
+    }
 }

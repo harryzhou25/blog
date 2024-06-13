@@ -64,4 +64,10 @@ public class commentServiceImpl implements commentService {
         commentmapper.insert(comment);
         return Result.success("Comment updated");
     }
+
+    @Override
+    public Result deleteComment(Long id) {
+        commentmapper.deleteById(id);
+        return Result.success("Comment deleted");
+    }
 }
