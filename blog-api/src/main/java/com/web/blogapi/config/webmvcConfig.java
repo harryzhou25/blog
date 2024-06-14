@@ -31,8 +31,9 @@ public class webmvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/logout")
-                .addPathPatterns("/comment/publish")
                 .addPathPatterns("/comment/delete")
+                .addPathPatterns("/comment/publish")
+                .addPathPatterns("/article/edit")
                 .addPathPatterns("/article/publish");
     }
 }
