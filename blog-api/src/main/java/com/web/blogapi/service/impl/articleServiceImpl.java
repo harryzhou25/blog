@@ -1,6 +1,7 @@
 package com.web.blogapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.web.blogapi.dao.mapper.tagMapper;
 import com.web.blogapi.dao.pojo.Article;
@@ -95,24 +96,58 @@ public class articleServiceImpl implements articleService {
         article.setCreateDate(System.currentTimeMillis());
         article.setCategoryId(articleparam.getCategoryId());
         articleMapper.insert(article);
-
         Long articleId = article.getId();
-        articleBody body = new articleBody();
-        body.setArticle_id(articleId);
-        body.setContent(articleparam.getContent());
-        body.setContent_html(articleparam.getContentHtml());
-        articleBodyMapper.insert(body);
-        article.setBodyId(body.getId());
-        articleMapper.updateById(article);
 
-        List<String> tags = articleparam.getTags();
-        for (String name : tags) {
-            Tag tag = new Tag();
-            tag.setTagName(name);
+        articleBody articleBody = new articleBody();
+        articleBody.setArticleId(articleId);
+        articleBody.setContent(articleparam.getContent());
+        articleBody.setContent_html(articleparam.getContentHtml());
+        articleBodyMapper.insert(articleBody);
+        article.setBodyId(articleBody.getId());
+        articleMapper.updateById(article);
+        List<Tag> tags = articleparam.getTags();
+        for (Tag tag : tags) {
             tag.setArticle_id(articleId);
             tagmapper.insert(tag);
         }
-
         return Result.success("Article published");
+    }
+
+    @Override
+    public Result editArticle(articleParam articleparam) {
+        Long articleId = articleparam.getArticleId();
+        Article article = new Article();
+        article.setId(articleId);
+        article.setTitle(articleparam.getTitle());
+        article.setSummary(articleparam.getSummary());
+        article.setCategoryId(articleparam.getCategoryId());
+        articleMapper.updateById(article);
+
+        articleBody articlebody = new articleBody();
+        articlebody.setArticleId(articleId);
+        articlebody.setContent(articleparam.getContent());
+        articlebody.setContent_html(articleparam.getContentHtml());
+        LambdaUpdateWrapper<articleBody> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(articleBody::getArticleId, articleId);
+        articleBodyMapper.update(articlebody, updateWrapper);
+
+        List<Tag> tags = articleparam.getTags();
+        List<Tag> current_tags = tagmapper.selectList(null);
+        for (Tag tag : current_tags) {
+            if(!tags.contains(tag)) {
+                tagmapper.deleteById(tag.getId());
+            }
+        }
+        for (Tag tag : tags) {
+            tag.setArticle_id(articleId);
+            LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Tag::getTagName, tag.getTagName());
+            queryWrapper.eq(Tag::getArticle_id, articleId);
+            Tag _tag = tagmapper.selectOne(queryWrapper);
+            if(_tag == null) {
+                tagmapper.insert(tag);
+            }
+        }
+        return Result.success("Article updated");
     }
 }

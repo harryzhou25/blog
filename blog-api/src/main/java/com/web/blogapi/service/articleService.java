@@ -16,4 +16,6 @@ public interface articleService {
     Result getBodyById(int id);
 
     Result publishArticle(articleParam articleparam);
+
+    Result editArticle(articleParam articleparam);
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 public class articleBody {
     private Long id;
 
-    private Long article_id;
+    private Long ArticleId;
 
     private String content;
 

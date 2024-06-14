@@ -68,4 +68,9 @@ public class articleController {
     public Result publishArticle(@RequestBody articleParam articleparam) {
         return articleService.publishArticle(articleparam);
     }
+
+    @PostMapping("edit")
+    public Result editArticle(@RequestBody articleParam articleparam) {
+        return articleService.editArticle(articleparam);
+    }
 }
