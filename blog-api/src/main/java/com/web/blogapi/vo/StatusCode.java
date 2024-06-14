@@ -7,8 +7,9 @@ public enum StatusCode {
     // SSO Status Code
     ACCOUNT_PWD_NOT_EXIST(10011,"Incorrect Account number or Password"),
     TOKEN_ERROR(10012,"Invalid token"),
-    ACCOUNT_EXIST(10013, "Account already exists");
-
+    ACCOUNT_EXIST(10013, "Account already exists"),
+    USER_NOT_LOGIN(10014, "User not logged in"),
+    INVALID_TOKEN(10015, "Invalid token");
     private int code;
     private String msg;
 

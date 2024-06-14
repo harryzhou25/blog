@@ -22,7 +22,7 @@ public class commentController {
         return commentservice.getCommentsByPid(id);
     }
 
-    @PostMapping
+    @PostMapping("publish")
     public Result insertComment(commentParam commentparam) {
         return commentservice.insertComment(commentparam);
     }

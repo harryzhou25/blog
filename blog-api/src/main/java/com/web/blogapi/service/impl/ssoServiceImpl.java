@@ -1,6 +1,7 @@
 package com.web.blogapi.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.web.blogapi.vo.StatusCode;
 import com.web.blogapi.dao.pojo.sysUser;
 import com.web.blogapi.service.ssoService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -73,5 +75,21 @@ public class ssoServiceImpl implements ssoService {
         String token = JWTUtil.createToken(user.getId());
         redisTemplate.opsForValue().set("TOKEN_"+token, JSON.toJSONString(user),1, TimeUnit.DAYS);
         return Result.success(token);
+    }
+
+    @Override
+    public sysUser verifyToken(String token) {
+        if (StringUtils.isBlank(token)){
+            return null;
+        }
+        Map<String, Object> stringObjectMap = JWTUtil.checkToken(token);
+        if (stringObjectMap == null){
+            return null;
+        }
+        String userJson = redisTemplate.opsForValue().get("TOKEN_" + token);
+        if (StringUtils.isBlank(userJson)){
+            return null;
+        }
+        return JSON.parseObject(userJson, sysUser.class);
     }
 }
