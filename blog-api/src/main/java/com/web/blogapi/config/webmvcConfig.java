@@ -14,7 +14,7 @@ public class webmvcConfig implements WebMvcConfigurer {
 
     /**
      * Cross mapping configuration
-     * @param registry
+     * @param registry Spring CorsRegistry
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -25,11 +25,12 @@ public class webmvcConfig implements WebMvcConfigurer {
     /**
      * Interceptor configuration
      *     Currently contains: Login interceptor
-     * @param registry
+     * @param registry Spring InterceptorRegistry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/logout")
                 .addPathPatterns("/comment/publish")
                 .addPathPatterns("/comment/delete")
                 .addPathPatterns("/article/publish");
