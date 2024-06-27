@@ -1,5 +1,6 @@
 package com.web.blogapi.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,9 +16,11 @@ import com.web.blogapi.vo.pageParam;
 import com.web.blogapi.dao.mapper.articleMapper;
 import com.web.blogapi.dao.mapper.articleBodyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class articleServiceImpl implements articleService {
@@ -33,6 +36,9 @@ public class articleServiceImpl implements articleService {
 
     @Autowired
     private tagMapper tagmapper;
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     // Paging query articles
     @Override
@@ -73,15 +79,26 @@ public class articleServiceImpl implements articleService {
 
     @Override
     public Result getBodyById(int id) {
-        Article article = articleMapper.selectById(id);
-        articleBody articleBody = articleBodyMapper.selectById(article.getBodyId());
-
         // update view count only when the frontend queries article body
         // avoid influencing the time cost of querying article body, I decided update the value using multithreading.
-        // TODO: Change this update by using redis.
 
-        threadService.updateArticleCount(articleMapper, article);
-        return Result.success(articleBody);
+        String cacheKey = "Article_" + id;
+        String cahce_string = redisTemplate.opsForValue().get(cacheKey);
+        if (cahce_string != null) {
+            Article article = JSON.parseObject(cahce_string, Article.class);
+            threadService.updateArticleCount(articleMapper, article);
+            return Result.success(cahce_string);
+        }
+        else {
+            Article article = articleMapper.selectById(id);
+            String article_json = JSON.toJSONString(article);
+            articleBody articleBody = articleBodyMapper.selectById(article.getBodyId());
+
+            redisTemplate.opsForValue().set(cacheKey, article_json, 1, TimeUnit.DAYS);
+
+            threadService.updateArticleCount(articleMapper, article);
+            return Result.success(articleBody);
+        }
     }
 
     @Override
